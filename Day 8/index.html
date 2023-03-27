@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DOM Elements</title>
+</head>
+<body>
+	<header>
+		<h1>My Website</h1>
+	</header>
+
+	<main>
+		<form id="myForm">
+			<label for="nameInput">Name:</label>
+			<input type="text" id="nameInput" name="nameInput"><br>
+
+			<label for="genderInput">Gender:</label>
+			<input type="text" id="genderInput" name="genderInput"><br>
+
+			<button type="submit">Submit</button>
+		</form>
+
+		<div id="elementList"></div>
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2023</p>
+	</footer>
+
+	<script>
+		const form = document.getElementById("myForm");
+		const elementList = document.getElementById("elementList");
+
+		form.addEventListener("submit", function(event) {
+			event.preventDefault();
+
+			const nameInput = document.getElementById("nameInput");
+			const genderInput = document.getElementById("genderInput");
+
+			const nameValue = nameInput.value;
+			const genderValue = genderInput.value;
+
+			const element = document.createElement("div");
+			element.classList.add("element");
+
+			const nameText = document.createElement("p");
+			nameText.textContent = "Name: " + nameValue;
+			element.appendChild(nameText);
+
+			const genderText = document.createElement("p");
+			genderText.textContent = "Gender: " + genderValue;
+			element.appendChild(genderText);
+
+			const deleteButton = document.createElement("button");
+			deleteButton.textContent = "Delete";
+			deleteButton.addEventListener("click", function() {
+				element.remove();
+			});
+			element.appendChild(deleteButton);
+
+			elementList.appendChild(element);
+
+			form.reset();
+		});
+
+		const maleRadio = document.createElement("input");
+		maleRadio.type = "radio";
+		maleRadio.name = "genderFilter";
+		maleRadio.value = "male";
+		maleRadio.addEventListener("change", function() {
+			filterElements("male");
+		});
+		elementList.before(maleRadio);
+
+		const maleLabel = document.createElement("label");
+		maleLabel.textContent = "Male";
+		maleLabel.htmlFor = "maleFilter";
+		elementList.before(maleLabel);
+
+		const femaleRadio = document.createElement("input");
+		femaleRadio.type = "radio";
+		femaleRadio.name = "genderFilter";
+		femaleRadio.value = "female";
+		femaleRadio.addEventListener("change", function() {
+			filterElements("female");
+		});
+		elementList.before(femaleRadio);
+
+		const femaleLabel = document.createElement("label");
+		femaleLabel.textContent = "Female";
+		femaleLabel.htmlFor = "femaleFilter";
+		elementList.before(femaleLabel);
+
+		function filterElements(gender) {
+			const elements = document.querySelectorAll(".element");
+
+			elements.forEach(function(element) {
+				const genderText = element.querySelector("p:nth-of-type(2)");
+
+				if (genderText.textContent.includes(gender)) {
+					element.style.display = "block";
+				} else {
+					element.style.display = "none";
+				}
+			});
+		}
+	</script>
+</body>
+</html>
